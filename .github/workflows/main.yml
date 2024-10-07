@@ -2,6 +2,9 @@ name: Deploy Terraform Template
 
 on:
   workflow_call:
+    # push:
+      #   branches:
+      #     - main
     inputs:
       environment_name:
         required: false
@@ -21,10 +24,7 @@ on:
       AWSDefaultRegion:
         required: false
         type: string
-  # push:
-  #   branches:
-  #     - main
-      
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
