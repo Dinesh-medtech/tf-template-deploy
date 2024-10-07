@@ -1,0 +1,35 @@
+name: Deploy Terraform Template
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+      
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step: Set AWS credentials using OIDC
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AwsAcarinOIDCRole }}
+          aws-region: ${{ inputs.AWSDefaultRegion }}
+          role-session-name: "GitHubActions"
+          
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.0 
+      
+      - name: Init, Plan, and Apply Terraform
+        run: |
+          # cd terraform
+          terraform init
+          terraform plan 
+          terraform apply -auto-approve 
