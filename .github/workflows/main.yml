@@ -1,7 +1,23 @@
 name: Deploy Terraform Template
 
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      environment_name:
+        required: false
+        type: string
+      google_client_id:
+        required: false
+        type: string
+      google_client_secret:
+        required: false
+        type: string
+      linkedin_client_id:
+        required: false
+        type: string
+      linkedin_client_secret:
+        required: false
+        type: string
   # push:
   #   branches:
   #     - main
@@ -31,5 +47,5 @@ jobs:
         run: |
           # cd terraform
           terraform init
-          terraform plan 
-          terraform apply -auto-approve 
+          terraform plan -var="environment_name=${{ inputs.environment_name }}" -var="google_client_id=${{ inputs.google_client_id }}" -var="google_client_secret=${{ inputs.google_client_secret }}" -var="linkedin_client_id=${{ inputs.linkedin_client_id }}" -var="linkedin_client_secret=${{ inputs.linkedin_client_secret }}"
+          terraform apply -auto-approve -var="environment_name=${{ inputs.environment_name }}" -var="google_client_id=${{ inputs.google_client_id }}" -var="google_client_secret=${{ inputs.google_client_secret }}" -var="linkedin_client_id=${{ inputs.linkedin_client_id }}" -var="linkedin_client_secret=${{ inputs.linkedin_client_secret }}"
