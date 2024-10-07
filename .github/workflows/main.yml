@@ -18,6 +18,9 @@ on:
       linkedin_client_secret:
         required: false
         type: string
+      AWSDefaultRegion:
+        required: false
+        type: string
   # push:
   #   branches:
   #     - main
