@@ -1,1 +1,18 @@
+name: cf pipeline
 
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/main.yml
+    with:
+      AWSDefaultRegion: us-east-1
+      environment_name: dev
+    secrets:
+      linkedInClientId: ${{secrets.LINKEDIN_CLIENTID_NP}}
+      linkedInClientSecret: ${{secrets.LINKEDIN_CLIENTSECRET_NP}}
+      googleClientId: ${{secrets.GOOGLE_CLIENTID_NP}}
+      googleClientSecret: ${{secrets.GOOGLE_CLIENTSECRET_NP}}
