@@ -51,7 +51,6 @@ resource "aws_cognito_user_pool_client" "my_user_pool_client" {
   logout_urls                = ["https://example.com/logout"] 
 }
 
-# Create an RDS PostgreSQL database
 resource "aws_db_instance" "my_db" {
   identifier        = "my-database"
   engine            = "postgres"
