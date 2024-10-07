@@ -29,7 +29,7 @@ variable "linkedin_client_secret" {
 
 # Cognito User Pool
 resource "aws_cognito_user_pool" "user_pool" {
-  name = "AcabotNext-var.environment_name"
+  name = "my-app-${var.environment_name}"
 
   admin_create_user_config {
     allow_admin_create_user_only = false
@@ -51,8 +51,8 @@ resource "aws_cognito_user_pool" "user_pool" {
 # Cognito User Pool Resource Server
 resource "aws_cognito_resource_server" "resource_server" {
   user_pool_id = aws_cognito_user_pool.user_pool.id
-  identifier   = "acabotnext_api"
-  name         = "AcabotNext-var.environment_name"
+  identifier   = "my-app_api"
+  name         = "my-app-${var.environment_name}"
 
   scope {
     scope_name        = "all"
@@ -63,7 +63,7 @@ resource "aws_cognito_resource_server" "resource_server" {
 # Cognito User Pool Client for Social Login
 resource "aws_cognito_user_pool_client" "user_pool_client1" {
   user_pool_id = aws_cognito_user_pool.user_pool.id
-  name         = "AcabotNext-SocialLogin-var.environment_name"
+  name         = "my-app-SocialLogin-${var.environment_name}"
 
   generate_secret = true
   allowed_oauth_flows = ["code"]
@@ -78,21 +78,11 @@ resource "aws_cognito_user_pool_client" "user_pool_client1" {
   explicit_auth_flows = ["USER_PASSWORD_AUTH"]
 
   callback_urls = [
-    "http://localhost:3000/api/auth/callback/cognito",
-    "http://localhost:3000/api/auth/callback/google",
-    "http://localhost:3000/api/auth/callback/linkedin",
-    "http://localhost:3000/dashboard/api/auth/callback",
-    "http://localhost:3000/dashboard",
-    "https://${lookup(data.aws_ssm_parameter.domain_map, var.environment_name)}/api/auth/callback",
-    "https://${lookup(data.aws_ssm_parameter.domain_map, var.environment_name)}/api/auth/callback/cognito",
-    "https://${lookup(data.aws_ssm_parameter.domain_map, var.environment_name)}/api/auth/callback/google",
-    "https://${lookup(data.aws_ssm_parameter.domain_map, var.environment_name)}/api/auth/callback/linkedin",
-    "https://${lookup(data.aws_ssm_parameter.domain_map, var.environment_name)}/dashboard"
+    "http://localhost:3000/dashboard"
   ]
 
   logout_urls = [
-    "http://localhost:3000/login",
-    "https://${lookup(data.aws_ssm_parameter.domain_map, var.environment_name)}/login"
+    "http://localhost:3000/login"
   ]
 
   supported_identity_providers = ["LinkedIn", "Google"]
@@ -101,7 +91,7 @@ resource "aws_cognito_user_pool_client" "user_pool_client1" {
 # Cognito User Pool Client for Credential Login
 resource "aws_cognito_user_pool_client" "user_pool_client2" {
   user_pool_id = aws_cognito_user_pool.user_pool.id
-  name         = "AcabotNext-CredentialLogin-var.environment_name"
+  name         = "my-app-CredentialLogin-${var.environment_name}"
 
   generate_secret = false
   explicit_auth_flows = [
@@ -179,7 +169,7 @@ resource "aws_rds_cluster" "aurora_cluster" {
   master_username         = "myadmin"
   master_password         = "mypassword"
   database_name           = "mydatabase"
-  backup_retention_period = 7  # Retain backups for 7 days
+  backup_retention_period = 7  
   preferred_backup_window = "07:00-09:00"
   skip_final_snapshot     = true 
   vpc_security_group_ids  = [aws_security_group.db_sg.id]
@@ -187,7 +177,7 @@ resource "aws_rds_cluster" "aurora_cluster" {
 
 # Create two Aurora DB cluster instances (Writer and Reader)
 resource "aws_rds_cluster_instance" "aurora_instance_writer" {
-  identifier              = "aurora-instance-1"
+  identifier              = "aurora-instance"
   cluster_identifier      = aws_rds_cluster.aurora_cluster.id
   instance_class          = "db.r6g.large"
   engine                  = aws_rds_cluster.aurora_cluster.engine
