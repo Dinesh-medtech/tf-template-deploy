@@ -9,21 +9,20 @@ on:
       environment_name:
         required: false
         type: string
-      google_client_id:
-        required: false
-        type: string
-      google_client_secret:
-        required: false
-        type: string
-      linkedin_client_id:
-        required: false
-        type: string
-      linkedin_client_secret:
-        required: false
-        type: string
       AWSDefaultRegion:
         required: false
         type: string
+
+    secrets:
+      google_client_id:
+        required: true
+      google_client_secret:
+        required: true
+      linkedin_client_id:
+        required: true
+      linkedin_client_secret:
+        required: true
+      
 
 jobs:
   deploy:
